@@ -1,22 +1,513 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="eportal">
 <head>
-  <meta charset="utf-8">
-  <title>GoPhish Test Link</title>
+	<!-- Google Tag Manager -->
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+					new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+				j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+				'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-NR8243F');</script>
+	<!-- End Google Tag Manager -->
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+
+	<title>Zalamea HR - EPortal</title>
+
+	<script type="text/javascript">
+		/**
+* User: Romulo G. Valiente
+* Date: 8/3/2016
+* Time: 8:10 AM
+*/
+
+/*var URL_API_SESSION_LOGIN                           = 'https://eportal.zalamea.ph/api/session/login'; */
+var URL_API_SESSION_LOGOUT                            = 'https://eportal.zalamea.ph/api/session/logout';
+var URL_API_SESSION_CURRENT_USER                      = 'https://eportal.zalamea.ph/api/session/current-user';
+var URL_API_SESSION_CHECK_SESSION                     = 'https://eportal.zalamea.ph/api/session/check-session';
+var URL_API_APP_SETTINGS		                      = 'https://eportal.zalamea.ph/api/app/settings';
+var URL_API_APP_DUMMY		                          = 'https://eportal.zalamea.ph/api/app/dummy';
+
+var URL_API_USER_DETAIL                               = 'https://eportal.zalamea.ph/api/user/detail';
+var URL_API_USER_DELETE                               = 'https://eportal.zalamea.ph/api/user/delete';
+var URL_API_USER_ADD                                  = 'https://eportal.zalamea.ph/api/user/add';
+var URL_API_USER_UPLOAD_USERS                         = 'https://eportal.zalamea.ph/api/user/upload';
+
+var URL_AUTH_LOGIN                                    = 'https://eportal.zalamea.ph/auth/login';
+var URL_AUTH_REGISTER                                 = 'https://eportal.zalamea.ph/auth/register';
+var URL_AUTH_RESEND                                   = 'https://eportal.zalamea.ph/auth/resend';
+var URL_AUTH_CONFIRM                                  = 'https://eportal.zalamea.ph/auth/confirm';
+var URL_AUTH_FACEBOOK                                 = 'https://eportal.zalamea.ph/auth/access/facebook';
+var URL_AUTH_GOOGLE                                   = 'https://eportal.zalamea.ph/auth/access/google';
+var URL_API_VERIFY_EMAIL                              = 'https://eportal.zalamea.ph/auth/okta/verifyEmail';
+var URL_API_GET_OKTA_BASE_URL                         = 'https://eportal.zalamea.ph/api/session/okta-base-url';
+
+var URL_AUTH_VERIFY                                    = 'https://eportal.zalamea.ph/auth/verify';
+
+var URL_PASSWORD_SEND_EMAIL                           = 'https://eportal.zalamea.ph/password/email';
+var URL_PASSWORD_RESET                                = 'https://eportal.zalamea.ph/password/reset';
+var URL_PASSWORD_INITIAL_RESET                        = 'https://eportal.zalamea.ph/password/initial-reset';
+var URL_PASSWORD_UPDATE                               = 'https://eportal.zalamea.ph/password/change-password';
+var URL_PASSWORD_CHECK_TOKEN                          = 'https://eportal.zalamea.ph/password/check-token';
+
+var URL_API_EMPLOYEE_SAVE                             = 'https://eportal.zalamea.ph/api/employee/save';
+var URL_API_EMPLOYEE_DETAIL                           = 'https://eportal.zalamea.ph/api/employee/detail';
+var URL_API_EMPLOYEE_BY_EMAIL                         = 'https://eportal.zalamea.ph/api/employee/detail-by-email';
+var URL_API_EMPLOYEE_EMPLOYEE_BY_EMAIL                 = 'https://eportal.zalamea.ph/api/employee/employee-detail-by-email-with-overtime';
+var URL_API_EMPLOYEE_DETAIL_BY_EMAIL                  = 'https://eportal.zalamea.ph/api/employee/employee-detail';
+var URL_API_EMPLOYEE_MEMBERS                          = 'https://eportal.zalamea.ph/api/employee/members';
+var URL_API_EMPLOYEE_BY_BIRTH_MONTH                   = 'https://eportal.zalamea.ph/api/employee/employees-by-birth-month';
+var URL_API_EMPLOYEE_UPCOMING_ANNIVERSARIES           = 'https://eportal.zalamea.ph/api/employee/upcoming-anniversaries';
+var URL_API_EMPLOYEE_EXPIRING_CONTRACTS               = 'https://eportal.zalamea.ph/api/employee/expiring-contracts';
+var URL_API_EMPLOYEE_FOR_REGULARIZATION               = 'https://eportal.zalamea.ph/api/employee/for-regularization';
+var URL_API_EMPLOYEES                                 = 'https://eportal.zalamea.ph/api/employee/employees';
+var URL_API_EMPLOYEES_SEND_WELCOME_MAIL               = 'https://eportal.zalamea.ph/api/employee/send-welcome-mail'
+var URL_API_EMPLOYEE_BY_EMAIL_FOR_TIMESHEET           = 'https://eportal.zalamea.ph/api/employee/detail-by-email-for-timesheet'
+var URL_API_EMPLOYEE_MODELS_FOR_CALENDAR              = 'https://eportal.zalamea.ph/api/employee/models-for-calendar'
+var URL_API_EMPLOYEE_GET_CATEGORY                     = 'https://eportal.zalamea.ph/api/employee/category';
+var URL_API_EMPLOYEE_DOWNLOAD_EMPLOYEE_LIST           = 'https://eportal.zalamea.ph/api/employee/download-employee-list';
+var URL_API_EMPLOYEE_EMPLOYEE_LIST_FOR_ANNEX_F        = 'https://eportal.zalamea.ph/api/employee/employee-list-for-annex-f';
+
+var URL_API_EMPLOYEE_LEAVES                           = 'https://eportal.zalamea.ph/api/employee-leave/employee-leaves';
+var URL_API_EMPLOYEE_LEAVES_BY_DATE_RANGE             = 'https://eportal.zalamea.ph/api/employee-leave/employee-leaves-by-date-range';
+
+var URL_API_PAYSLIP_DETAIL                            = 'https://eportal.zalamea.ph/api/payslip/detail';
+var URL_API_PAYSLIP_LIST                              = 'https://eportal.zalamea.ph/api/payslip/list';
+var URL_API_PAYSLIP_CYCLES                            = 'https://eportal.zalamea.ph/api/payslip/payslip-cycles';
+var URL_API_PAYSLIP_BY_DATE                           = 'https://eportal.zalamea.ph/api/payslip/payslip-by-date';
+var URL_API_PAYSLIP_BY_CYCLE                          = 'https://eportal.zalamea.ph/api/payslip/my-payslips-by-cycle';
+
+var URL_API_CYCLE_LIST                                = 'https://eportal.zalamea.ph/api/cycle/list';
+var URL_API_MY_CYCLE_LIST                             = 'https://eportal.zalamea.ph/api/cycle/my-cycles';
+var URL_API_CYCLE_DELETE                              = 'https://eportal.zalamea.ph/api/cycle/delete-cycles';
+var URL_API_DUPLICATE_CYCLE_LIST                      = 'https://eportal.zalamea.ph/api/cycle/duplicate-cycles';
+
+var URL_API_TIMESHEET                                 = 'https://eportal.zalamea.ph/api/timesheet/timesheet';
+var URL_API_MY_TIMESHEET                              = 'https://eportal.zalamea.ph/api/timesheet/my-timesheet';
+var URL_API_MY_PREVIOUS_TIMESHEET                     = 'https://eportal.zalamea.ph/api/timesheet/my-previous-timesheet';
+var URL_API_TIMESHEET_SAVE_TEMP                       = 'https://eportal.zalamea.ph/api/timesheet/save-temp';
+var URL_API_TIMESHEET_UPDATES                         = 'https://eportal.zalamea.ph/api/timesheet/timesheet-updates';
+var URL_API_TIMESHEET_UPDATE_TIMESHEET                = 'https://eportal.zalamea.ph/api/timesheet/update-timesheet';
+var URL_API_TIMESHEET_DETAIL_BY_ID                    = 'https://eportal.zalamea.ph/api/timesheet/timesheet-updates-by-id';
+var URL_API_TIMESHEET_SAVE_SCHEDULE                   = 'https://eportal.zalamea.ph/api/timesheet/save-new-schedule';
+var URL_API_TIMESHEET_UPDATE_LOGS                     = 'https://eportal.zalamea.ph/api/timesheet/update-logs';
+var URL_API_TIMESHEET_LOGS_REQUESTS                   = 'https://eportal.zalamea.ph/api/timesheet/logs-requests';
+var URL_API_TIMESHEET_WITH_MISSING_REGULAR_HOURS      = 'https://eportal.zalamea.ph/api/timesheet/time-entries-with-missing-regular-hours';
+var URL_API_TIMESHEET_APPROVE_EDIT_LOGS_REQUEST       = 'https://eportal.zalamea.ph/api/timesheet/approve-edit-logs-request';
+var URL_API_TIMESHEET_CREATE_MY_DTR                   = 'https://eportal.zalamea.ph/api/timesheet/create-my-daily-time-record';
+var URL_API_TIMESHEET_DECLINE_EDIT_LOGS_REQUEST       = 'https://eportal.zalamea.ph/api/timesheet/decline-edit-logs-request';
+var URL_API_TIMESHEET_SYNC_DATA                       = 'https://eportal.zalamea.ph/api/timesheet/sync-timesheet';
+var URL_API_TIMESHEET_GET_LOG_REQUESTS                = 'https://eportal.zalamea.ph/api/timesheet/update-log-requests';
+var URL_API_TIMESHEET_POST_SYNC_HOLIDAYS               = 'https://eportal.zalamea.ph/api/timesheet/sync-holidays';
+var URL_API_TIMESHEET_GET_PREVIOUS_TIME_CLOCK_LOGS    = 'https://eportal.zalamea.ph/api/timesheet/previous-time-clock-logs';
+var URL_API_TIMESHEET_REQUEST_WITHDRAW                = 'https://eportal.zalamea.ph/api/timesheet/withdraw';
+var URL_API_TIMESHEET_SAVE_TIMESHEET_KAMBI            = 'https://eportal.zalamea.ph/api/timesheet/save-timesheet-kambi';
+var URL_API_TIMESHEET_APPROVE_DTRS                    = 'https://eportal.zalamea.ph/api/timesheet/approve-dtrs';
+
+
+var URL_API_COMPANY_SETTINGS                          = 'https://eportal.zalamea.ph/api/setting/settings';
+var URL_API_COMPANY_SETTING_SAVE                      = 'https://eportal.zalamea.ph/api/setting/save';
+var URL_API_COMPANY_SETTING_DELETE                    = 'https://eportal.zalamea.ph/api/setting/delete';
+var URL_AP_COMPANY_SETTING_GROUP_LIST                 = 'https://eportal.zalamea.ph/api/setting/group-list';
+var URL_API_COMPANY_SETTING_SAVE_GROUP                = 'https://eportal.zalamea.ph/api/setting/save-group';
+var URL_AP_COMPANY_SETTING_GROUP                      = 'https://eportal.zalamea.ph/api/setting/groups';
+var URL_API_COMPANY_SETTING_DELETE_GROUP              = 'https://eportal.zalamea.ph/api/setting/delete-group';
+var URL_AP_COMPANY_SETTING_LEAVE_TYPES                = 'https://eportal.zalamea.ph/api/setting/leave-types';
+var URL_API_COMPANY_SETTING_SAVE_LEAVE_TYPE           = 'https://eportal.zalamea.ph/api/setting/save-leave-types';
+var URL_API_COMPANY_SETTING_DELETE_LEAVE_TYPE         = 'https://eportal.zalamea.ph/api/setting/delete-leave-type';
+var URL_API_COMPANY_SETTING_UPDATE_COE_V2             = 'https://eportal.zalamea.ph/api/setting/update-coe-v2';
+var URL_API_COMPANY_SETTING_SIGNATURE_IMG             = 'https://eportal.zalamea.ph/api/setting/signature-img';
+var URL_API_COMPANY_SETTING_UPDATE_MY_DOCUMENTS       = 'https://eportal.zalamea.ph/api/setting/update-my-document';
+var URL_API_COMPANY_SETTING_MY_DOCUMENT_SIGNATORY_IMG = 'https://eportal.zalamea.ph/api/setting/my-document-signatory-img';
+var URL_API_COMPANY_SETTING_UPDATE_COE_SIGNATORY      = 'https://eportal.zalamea.ph/api/setting/update-coe-signatory';
+var URL_API_COMPANY_SETTING_COE_FIRST_SIGNATORY_IMG   = 'https://eportal.zalamea.ph/api/setting/coe-first-signatory-img';
+var URL_API_COMPANY_SETTING_COE_SECOND_SIGNATORY_IMG  = 'https://eportal.zalamea.ph/api/setting/coe-second-signatory-img';
+var URL_API_COMPANY_SETTING_UPDATE_COE_GLAPI          = 'https://eportal.zalamea.ph/api/setting/update-coe-glapi';
+var URL_API_COMPANY_SETTING_GLAPI_SIGNATURE_IMG       = 'https://eportal.zalamea.ph/api/setting/glapi-signature-img';
+
+var URL_API_COMPANY_SETTING_UPDATE_AS_COMPENSATORY    = 'https://eportal.zalamea.ph/api/setting/update-as-compensatory';
+
+var URL_API_LEAVE_REQUEST                             = 'https://eportal.zalamea.ph/api/leave/leave-request';
+var URL_API_LEAVE_REQUEST_DETAIL                      = 'https://eportal.zalamea.ph/api/leave/leave-request-detail';
+var URL_API_LEAVE_CONVERSATION                        = 'https://eportal.zalamea.ph/api/leave/conversation';
+var URL_API_LEAVE_REJECT                        	  = 'https://eportal.zalamea.ph/api/leave/reject';
+var URL_API_LEAVE_APPROVE                        	  = 'https://eportal.zalamea.ph/api/leave/approve';
+var URL_API_LEAVE_WITHDRAW                        	  = 'https://eportal.zalamea.ph/api/leave/withdraw';
+var URL_API_LEAVE_WITHDRAW_APPROVE                 	  = 'https://eportal.zalamea.ph/api/leave/withdraw-approve';
+var URL_API_LEAVE_WITHDRAW_DECLINE                 	  = 'https://eportal.zalamea.ph/api/leave/withdraw-decline';
+var URL_API_LEAVE_CANCEL_LEAVE                        = 'https://eportal.zalamea.ph/api/leave/cancel-leave';
+var URL_API_LEAVE_CANCEL_APPROVE                      = 'https://eportal.zalamea.ph/api/leave/cancel-approve';
+var URL_API_LEAVE_CANCEL_DECLINE                      = 'https://eportal.zalamea.ph/api/leave/cancel-decline';
+var URL_API_LEAVE_REQUEST_LIST                        = 'https://eportal.zalamea.ph/api/leave/leave-request-list';
+var URL_API_LEAVES                                    = 'https://eportal.zalamea.ph/api/leave/leaves';
+var URL_API_LEAVE_END_DATE                        	  = 'https://eportal.zalamea.ph/api/leave/leave-end-date';
+var URL_API_LEAVE_CREDITS                      	      = 'https://eportal.zalamea.ph/api/leave/leave-credits';
+var URL_API_LEAVE_REVERT                      	      = 'https://eportal.zalamea.ph/api/leave/revert';
+var URL_API_MEMBERS_LEAVES                      	  = 'https://eportal.zalamea.ph/api/leave/members-leaves';
+var URL_API_MY_LEAVES                      	          = 'https://eportal.zalamea.ph/api/leave/my-leaves';
+
+var URL_API_OVERTIME_SAVE                      	      = 'https://eportal.zalamea.ph/api/overtime/save';
+var URL_API_MY_OVERTIME                      	      = 'https://eportal.zalamea.ph/api/overtime/my-overtime';
+var URL_API_OVERTIME_DETAIL                      	  = 'https://eportal.zalamea.ph/api/overtime/detail';
+var URL_API_OVERTIME_DURATION                     	  = 'https://eportal.zalamea.ph/api/overtime/duration';
+var URL_API_OVERTIME_CONVERSATION                     = 'https://eportal.zalamea.ph/api/overtime/conversation';
+var URL_API_OVERTIME_REQUEST_WITHDRAW                 = 'https://eportal.zalamea.ph/api/overtime/withdraw';
+var URL_API_OVERTIME_REQUEST_APPROVE                  = 'https://eportal.zalamea.ph/api/overtime/approve';
+var URL_API_OVERTIME_REQUEST_REJECT                   = 'https://eportal.zalamea.ph/api/overtime/reject';
+var URL_API_OVERTIME_REQUEST_CANCEL                   = 'https://eportal.zalamea.ph/api/overtime/cancel';
+var URL_API_OVERTIME_REQUEST_CANCEL_PENDING           = 'https://eportal.zalamea.ph/api/overtime/cancel-pending-request';
+var URL_API_OVERTIME_REQUEST_REVERT                   = 'https://eportal.zalamea.ph/api/overtime/revert';
+var URL_API_MEMBERS_OVERTIME                      	  = 'https://eportal.zalamea.ph/api/overtime/members-overtime';
+var URL_API_TOTAL_OVERTIME                      	  = 'https://eportal.zalamea.ph/api/overtime/total-overtime';
+
+var URL_API_LOAN_LIST                                 = 'https://eportal.zalamea.ph/api/loan/list';
+var URL_API_LOAN_EMPLOYEE_LOANS                       = 'https://eportal.zalamea.ph/api/loan/employee-loans';
+var URL_API_LOAN_TYPES                                = 'https://eportal.zalamea.ph/api/loan/loan-types';
+var URL_API_LOAN_SAVE                                 = 'https://eportal.zalamea.ph/api/loan/save';
+var URL_API_CLOSE_LOAN                                = 'https://eportal.zalamea.ph/api/loan/close-loan';
+var URL_API_REOPEN_LOAN                               = 'https://eportal.zalamea.ph/api/loan/reopen-loan';
+var URL_API_DELETE_LOAN                               = 'https://eportal.zalamea.ph/api/loan/delete-loan';
+var URL_API_DELETE_REFINANCE_LOAN                     = 'https://eportal.zalamea.ph/api/loan/delete-refinance-loan';
+var URL_API_LOAN_NAMES                                = 'https://eportal.zalamea.ph/api/loan/loan-names';
+var URL_API_LOAN_PAYMENTS_LIST                        = 'https://eportal.zalamea.ph/api/loan/payments-list';
+
+var URL_API_ANNOUNCEMENT_SAVE                         = 'https://eportal.zalamea.ph/api/announcement/save';
+var URL_API_ANNOUNCEMENT_LIST                         = 'https://eportal.zalamea.ph/api/announcement/list';
+var URL_API_ANNOUNCEMENT_DELETE                         = 'https://eportal.zalamea.ph/api/announcement/delete';
+var URL_API_ANNOUNCEMENT_LIST_BY_COMPANY              = 'https://eportal.zalamea.ph/api/announcement/list-by-company';
+var URL_API_ANNOUNCEMENT_UPDATE_STATUS                = 'https://eportal.zalamea.ph/api/announcement/update-announcement-status';
+
+var URL_API_REASON_LIST                               = 'https://eportal.zalamea.ph/api/reason/list';
+var URL_API_REASON_UPDATE_CUSTOMIZABLE_REASONS        = 'https://eportal.zalamea.ph/api/reason/update-customizable-reasons';
+var URL_API_REASON_CUSTOMIZABLE_REASONS_LIST          = 'https://eportal.zalamea.ph/api/reason/customizable-reasons-list';
+var URL_API_REASON_UPDATE_REASONS                     = 'https://eportal.zalamea.ph/api/reason/update-reasons';
+
+var URL_API_CHAT_MESSAGE_SAVE                         = 'https://eportal.zalamea.ph/api/chat/save-message';
+
+var URL_API_STATUS_LIST                               = 'https://eportal.zalamea.ph/api/status/list';
+var URL_API_STATUS_OVERTIME_UPDATED                   = 'https://eportal.zalamea.ph/api/status/overtime-status-list';
+var URL_API_STATUS_LEAVE_UPDATED                      = 'https://eportal.zalamea.ph/api/status/leave-status-list';
+var URL_API_STATUS_LOGS_AND_SCHEDULE_UPDATED          = 'https://eportal.zalamea.ph/api/status/logs-and-schedule-status-list';
+var URL_API_MANAGED_EMPLOYEES_REQUEST_STATUS           = 'https://eportal.zalamea.ph/api/status/request-status';
+
+
+
+var URL_API_RECIPIENT_TYPE_LIST                       = 'https://eportal.zalamea.ph/api/recipient-type/list';
+
+var URL_API_RECIPIENT_LIST                            = 'https://eportal.zalamea.ph/api/recipient-type/list-by-type';
+
+var URL_API_SCHEDULE_REQUEST_LIST                     = 'https://eportal.zalamea.ph/api/schedule/members-change-requests';
+var URL_API_SCHEDULE_UPDATE_CYCLE_SHIFT               = 'https://eportal.zalamea.ph/api/schedule/update-cycle-shift';
+var URL_API_SCHEDULE_CHANGE_REQUEST_DETAIL            = 'https://eportal.zalamea.ph/api/schedule/change-request-detail';
+var URL_API_SCHEDULE_UPDATE_EMPLOYEE_SHIFT            = 'https://eportal.zalamea.ph/api/schedule/update-employee-shift';
+var URL_API_SCHEDULE_APPROVE_REQUEST                  = 'https://eportal.zalamea.ph/api/schedule/approve-change-schedule-request';
+var URL_API_SCHEDULE_DECLINE_REQUEST                  = 'https://eportal.zalamea.ph/api/schedule/decline-change-schedule-request';
+
+var URL_API_CERTIFICATE_TYPE_LIST                     = 'https://eportal.zalamea.ph/api/certificate/type-list';
+var URL_API_CERTIFICATE_SAVE                          = 'https://eportal.zalamea.ph/api/certificate/save';
+var URL_API_CERTIFICATE_REQUEST_LIST                  = 'https://eportal.zalamea.ph/api/certificate/request-list';
+var URL_API_CERTIFICATE_DOWNLOAD                      = 'https://eportal.zalamea.ph/api/certificate/download';
+var URL_API_CERTIFICATE_PRINT                         = 'https://eportal.zalamea.ph/api/certificate/print-coe';
+var URL_API_CERTIFICATE_REQUESTED_CERTIFICATES        = 'https://eportal.zalamea.ph/api/certificate/my-certificates';
+var URL_API_CERTIFICATE_UPDATE_STATUS                 = 'https://eportal.zalamea.ph/api/certificate/update-status';
+var URL_API_CERTIFICATE_DOWNLOAD                      = 'https://eportal.zalamea.ph/api/certificate/download-coe-v2';
+var URL_API_CERTIFICATE_PRINT                         = 'https://eportal.zalamea.ph/api/certificate/print-coe-v2';
+var URL_API_CERTIFICATE_DOWNLOAD_GLAPI                = 'https://eportal.zalamea.ph/api/certificate/download-coe-glapi';
+var URL_API_CERTIFICATE_PRINT_GLAPI                   = 'https://eportal.zalamea.ph/api/certificate/print-coe-glapi';
+
+var URL_API_PROFILE_UPDATE_REQUEST_SAVE               = 'https://eportal.zalamea.ph/api/profile/save';
+var URL_API_PROFILE_UPDATE_REQUEST_DETAIL_BY_EMAIL    = 'https://eportal.zalamea.ph/api/profile/detail-by-email';
+var URL_API_PROFILE_UPDATE_REQUEST_CANCEL             = 'https://eportal.zalamea.ph/api/profile/cancel-profile-request';
+var URL_API_PROFILE_UPDATE_REQUEST_LIST               = 'https://eportal.zalamea.ph/api/profile/request-list';
+var URL_API_PROFILE_UPDATE_STATUS                     = 'https://eportal.zalamea.ph/api/profile/update-status';
+var URL_API_PROFILE_ATTACHMENT_SAVE                   = 'https://eportal.zalamea.ph/api/profile/save-profile-file-info';
+var URL_API_PROFILE_ATTACHMENT_DELETE                 = 'https://eportal.zalamea.ph/api/profile/delete-profile-file-info';
+var URL_API_PROFILE_ATTACHMENT_LIST                   = 'https://eportal.zalamea.ph/api/profile/attachment-list';
+var URL_API_PROFILE_ATTACHMENT_LIST_BY_ID             = 'https://eportal.zalamea.ph/api/profile/attachment-list-by-employee-id';
+var URL_API_REQUEST_LIST                              = 'https://eportal.zalamea.ph/api/request/list';
+var URL_API_PROFILE_ATTACHMENT_UPDATE_STATUS          = 'https://eportal.zalamea.ph/api/profile/update-profile-file-info-status';
+var URL_API_PROFILE_ATTACHMENT_LIST_NOTIFICATION      = 'https://eportal.zalamea.ph/api/profile/attachment-list-notification';
+
+var URL_API_COMPANY_LIST                              = 'https://eportal.zalamea.ph/api/company/list';
+var URL_API_COMPANY_DETAIL                            = 'https://eportal.zalamea.ph/api/company/detail';
+var URL_API_COMPANY_EMPLOYEES                         = 'https://eportal.zalamea.ph/api/company/employees';
+var URL_API_COUNTS                                    = 'https://eportal.zalamea.ph/api/company/counts';
+var URL_API_COMPANY_ACTIVITY_LOGS                     = 'https://eportal.zalamea.ph/api/company/activity-logs';
+var URL_API_COMPANY_UPLOAD_LOGO                       = 'https://eportal.zalamea.ph/api/company/upload-logo';
+var URL_API_COMPANY_UPDATE_DASHBOARD_LOGO             = 'https://eportal.zalamea.ph/api/company/update-dashboard-logo';
+var URL_API_COMPANY_UPDATE_LOGIN_LOGO                 = 'https://eportal.zalamea.ph/api/company/update-login-logo';
+var URL_API_COMPANY_RETRIEVE_DASHBOARD_FILENAME       = 'https://eportal.zalamea.ph/api/company/retrieve-dashboard-filename';
+var URL_API_COMPANY_HOLIDAY                           = 'https://eportal.zalamea.ph/api/company/holiday';
+
+var URL_API_ASSIGNMENT_LIST                           = 'https://eportal.zalamea.ph/api/assignment/list';
+var URL_API_EMPLOYEE_LEAVE_ASSIGNMENTS                = 'https://eportal.zalamea.ph/api/assignment/employee-leave-assignments';
+var URL_API_LEAVE_ASSIGNMENT_DELETE                   = 'https://eportal.zalamea.ph/api/assignment/delete-leave-assignment';
+var URL_API_LEAVE_ASSIGNMENTS                         = 'https://eportal.zalamea.ph/api/assignment/leave-assignments';
+var URL_API_LEAVE_ASSIGNMENTS_DELETE                  = 'https://eportal.zalamea.ph/api/assignment/delete-leave-assignments';
+var URL_API_LEAVE_ASSIGNMENTS_VALID                   = 'https://eportal.zalamea.ph/api/assignment/valid-leave-assignments';
+var URL_API_LEAVE_ASSIGNMENTS_UPDATE                  = 'https://eportal.zalamea.ph/api/assignment/update-leave-assignment';
+
+var URL_API_LEAVE_CREDIT_SAVE                         = 'https://eportal.zalamea.ph/api/leave-credit/save';
+
+var URL_API_MANAGED_EMPLOYEES_REQUESTS                = 'https://eportal.zalamea.ph/api/supervisor/managed-employees-requests';
+var URL_API_MANAGED_EMPLOYEES_PENDING_REQUESTS        = 'https://eportal.zalamea.ph/api/supervisor/pending-requests';
+var URL_API_MANAGED_EMPLOYEES_ABSENTS                 = 'https://eportal.zalamea.ph/api/supervisor/absents';
+var URL_API_MANAGED_EMPLOYEES_PENDING_LEAVE_REQUESTS  = 'https://eportal.zalamea.ph/api/supervisor/approved-leave-requests';
+var URL_API_MANAGED_EMPLOYEES_PENDING_OVERTIME_REQUESTS = 'https://eportal.zalamea.ph/api/supervisor/approved-overtime-requests';
+var URL_API_MANAGED_EMPLOYEES_REQUEST_TYPES           = 'https://eportal.zalamea.ph/api/supervisor/request-types';
+
+var URL_API_EMPLOYEE_LIST                             = 'https://eportal.zalamea.ph/api/approver/employee-list';
+var URL_API_SECONDARY_APPROVER_LIST                   = 'https://eportal.zalamea.ph/api/approver/secondary-approver-list';
+var URL_API_APPROVER_SAVE                             = 'https://eportal.zalamea.ph/api/approver/save';
+var URL_API_APPROVER_APPROVERS                        = 'https://eportal.zalamea.ph/api/approver/approvers';
+var URL_API_APPROVER_DELETE                           = 'https://eportal.zalamea.ph/api/approver/delete';
+var URL_API_ADD_SECONDARY_APPROVER                    = 'https://eportal.zalamea.ph/api/approver/add-secondary-approver';
+var URL_API_APPROVER_NOTIFY_MY_APPROVER               = 'https://eportal.zalamea.ph/api/approver/notify-my-approver';
+var URL_API_APPROVER_ASSIGN_APPROVER                  = 'https://eportal.zalamea.ph/api/approver/assign-approver';
+var URL_API_APPROVER_APPROVER_ASSIGNMENT              = 'https://eportal.zalamea.ph/api/approver/upload-approver-assignment';
+
+var URL_API_EMPLOYEE_HMO_LIST                         = 'https://eportal.zalamea.ph/api/employee-hmo/list';
+var URL_API_EMPLOYEE_HMO_INSURANCES                   = 'https://eportal.zalamea.ph/api/employee-hmo/insurances';
+var URL_API_EMPLOYEE_HMO_ASSIGN                       = 'https://eportal.zalamea.ph/api/employee-hmo/assign-employee-hmo';
+var URL_API_EMPLOYEE_HMO_DELETE                       = 'https://eportal.zalamea.ph/api/employee-hmo/delete-employee-hmo';
+
+var URL_API_EMPLOYEE_HDMF_LIST                         = 'https://eportal.zalamea.ph/api/employee-hdmf/list';
+var URL_API_EMPLOYEE_HDMF_NAMES                        = 'https://eportal.zalamea.ph/api/employee-hdmf/hdmf-list';
+var URL_API_EMPLOYEE_HDMF_ASSIGN                       = 'https://eportal.zalamea.ph/api/employee-hdmf/assign-employee-hdmf';
+var URL_API_EMPLOYEE_HDMF_DELETE                       = 'https://eportal.zalamea.ph/api/employee-hdmf/delete-employee-hdmf';
+
+var URL_API_EMPLOYEE_ALLOWANCE_LIST                    = 'https://eportal.zalamea.ph/api/employee-allowance/list';
+var URL_API_EMPLOYEE_ALLOWANCE_NAMES                   = 'https://eportal.zalamea.ph/api/employee-allowance/allowances';
+var URL_API_EMPLOYEE_ALLOWANCE_ASSIGN                  = 'https://eportal.zalamea.ph/api/employee-allowance/assign-employee-allowance';
+var URL_API_EMPLOYEE_ALLOWANCE_DELETE                  = 'https://eportal.zalamea.ph/api/employee-allowance/delete-employee-allowance';
+
+var URL_API_EMPLOYEE_TASK_LIST                         = 'https://eportal.zalamea.ph/api/employee-task/list';
+var URL_API_EMPLOYEE_TASK_NAMES                        = 'https://eportal.zalamea.ph/api/employee-task/tasks';
+var URL_API_EMPLOYEE_PROJECT_LIST                      = 'https://eportal.zalamea.ph/api/employee-task/projects';
+var URL_API_EMPLOYEE_TASK_ASSIGN                       = 'https://eportal.zalamea.ph/api/employee-task/assign-employee-task';
+var URL_API_EMPLOYEE_TASK_DELETE                       = 'https://eportal.zalamea.ph/api/employee-task/delete-employee-task';
+
+var URL_API_EMPLOYEE_HISTORY_LIST                      = 'https://eportal.zalamea.ph/api/employee-history/list';
+var URL_API_EMPLOYEE_HISTORY_ADD                       = 'https://eportal.zalamea.ph/api/employee-history/add-employee-history';
+var URL_API_EMPLOYEE_HISTORY_DELETE                    = 'https://eportal.zalamea.ph/api/employee-history/delete-employee-history';
+
+var URL_API_PAY_RATES_LIST                             = 'https://eportal.zalamea.ph/api/pay-rate/list';
+
+var URL_API_LEAVE_TYPE_LIST                             = 'https://eportal.zalamea.ph/api/leave-type/list';
+
+var URL_API_REPORT_DOWNLOAD                             = 'https://eportal.zalamea.ph/api/report/download';
+var URL_API_REPORT_DOWNLOAD_REPORT                      = 'https://eportal.zalamea.ph/api/report/download-report';
+var URL_API_REPORT_DOWNLOAD_BIR_REPORT                  = 'https://eportal.zalamea.ph/api/report/download-bir-report';
+
+var URL_API_EMPLOYEE_APPROVER_LIST                      = 'https://eportal.zalamea.ph/api/employee-approver/employee-list';
+var URL_API_EMPLOYEE_APPROVER_SAVE                      = 'https://eportal.zalamea.ph/api/employee-approver/save';
+var URL_API_EMPLOYEE_APPROVERS                          = 'https://eportal.zalamea.ph/api/employee-approver/approvers';
+var URL_API_EMPLOYEE_APPROVERS_DELETE                   = 'https://eportal.zalamea.ph/api/employee-approver/delete';
+var URL_API_EMPLOYEE_REMOVE_SECONDARY_APPROVER          = 'https://eportal.zalamea.ph/api/employee-approver/remove-secondary-approver';
+
+var URL_API_LOCK_CYCLE                                  = 'https://eportal.zalamea.ph/api/lock-cycle/lock';
+var URL_API_UNLOCK_CYCLE                                = 'https://eportal.zalamea.ph/api/lock-cycle/unlock';
+var URL_API_LOCKED_CYCLE_LIST                           = 'https://eportal.zalamea.ph/api/lock-cycle/list';
+var URL_API_IS_LOCKED                                   = 'https://eportal.zalamea.ph/api/lock-cycle/is-locked';
+var URL_API_IS_LOCKED_BY_CYCLE                          = 'https://eportal.zalamea.ph/api/lock-cycle/is-locked-by-cycle';
+
+var URL_API_IP_WHITELIST_LIST_BY_COMPANY                = 'https://eportal.zalamea.ph/api/ip-whitelist/list-by-company';
+var URL_API_IP_WHITELIST_CREATE                         = 'https://eportal.zalamea.ph/api/ip-whitelist/create';
+var URL_API_IP_WHITELIST_UPDATE                         = 'https://eportal.zalamea.ph/api/ip-whitelist/update';
+var URL_API_IP_WHITELIST_DELETE                         = 'https://eportal.zalamea.ph/api/ip-whitelist/delete';
+var URL_API_IP_WHITELIST_SYNC_IP                        = 'https://eportal.zalamea.ph/api/ip-whitelist/sync-ip';
+var URL_API_IP_WHITELIST_ADDRESS_REGISTERED             = 'https://eportal.zalamea.ph/api/ip-whitelist/is-ip-address-registered';
+
+var URL_API_GEOLOCATION_LIST_BY_COMPANY                = 'https://eportal.zalamea.ph/api/geolocation/list-by-company';
+var URL_API_GEOLOCATION_CREATE                         = 'https://eportal.zalamea.ph/api/geolocation/create';
+var URL_API_GEOLOCATION_UPDATE                         = 'https://eportal.zalamea.ph/api/geolocation/update';
+var URL_API_GEOLOCATION_DELETE                         = 'https://eportal.zalamea.ph/api/geolocation/delete';
+var URL_API_GEOLOCATION_GET_ADDRESS                    = 'https://eportal.zalamea.ph/api/geolocation/get-address';
+
+var URL_API_REQUESTS_BY_STATUS_LIST                    = 'https://eportal.zalamea.ph/api/requests-by-status/request-list-by-status';
+
+var URL_API_UPLOAD_PASSWORD_DATA                       = 'https://eportal.zalamea.ph/api/upload-data/save';
+
+var URL_API_SHIFT_EMPLOYEE_WITH_SHIFT_LIST             = 'https://eportal.zalamea.ph/api/shift/employees-with-shift-list';
+var URL_API_SHIFT_LIST                                 = 'https://eportal.zalamea.ph/api/shift/shift-list';
+var URL_API_SHIFTS                                     = 'https://eportal.zalamea.ph/api/shift/shifts';
+var URL_API_SHIFT_UPDATE                               = 'https://eportal.zalamea.ph/api/shift/update-shift';
+var URL_API_SHIFT_BULK_UPDATE_SHIFT                    = 'https://eportal.zalamea.ph/api/shift/bulk-update-shift';
+var URL_API_SHIFT_SETUP                                = 'https://eportal.zalamea.ph/api/shift/upload-shift-setup';
+
+var URL_API_OVERTIME_REQUEST_LIST                      = 'https://eportal.zalamea.ph/api/overtime-assignment/overtime-request-list';
+var URL_API_OVERTIME_EMPLOYEE_LIST                     = 'https://eportal.zalamea.ph/api/overtime-assignment/employee-list';
+var URL_API_OVERTIME_ASSIGNMENT_ASSIGN_OVERTIME        = 'https://eportal.zalamea.ph/api/overtime-assignment/assign-overtime';
+
+var URL_API_MONTHLY_REMITTANCES_VARIANCES              = 'https://eportal.zalamea.ph/api/monthly-remittance/monthly-remittances-list';
+var URL_API_MONTHLY_REMITTANCES_SAVE_VARIANCES         = 'https://eportal.zalamea.ph/api/monthly-remittance/save';
+var URL_API_TOTAL_REMITTANCES_VARIANCES                = 'https://eportal.zalamea.ph/api/monthly-remittance/total-remittances';
+var URL_API_MONTHLY_REMITTANCES_SYSTEM_1601C           = 'https://eportal.zalamea.ph/api/monthly-remittance/system1601c-data';
+var URL_API_MONTHLY_REMITTANCES_SAVE_ADJUSTMENT_OF_TAXES         = 'https://eportal.zalamea.ph/api/monthly-remittance/save-adjustment-of-taxes';
+
+var URL_API_PERIOD_COVERED_LIST                        = 'https://eportal.zalamea.ph/api/period-covered/list';
+var URL_API_UPDATE_PERIOD_COVERED                      = 'https://eportal.zalamea.ph/api/period-covered/update-period';
+
+var URL_API_DISBURSEMENT_STATUS_LIST                   = 'https://eportal.zalamea.ph/api/disbursement/disbursement-list';
+var URL_API_DISBURSEMENT_TRANSACTIONS                  = 'https://eportal.zalamea.ph/api/disbursement/transactions';
+var URL_API_DISBURSEMENT_DETAILS                       = 'https://eportal.zalamea.ph/api/disbursement/details';
+var URL_API_DISBURSEMENT_CREATE                        = 'https://eportal.zalamea.ph/api/disbursement/create';
+var URL_API_DISBURSEMENT_UPDATE                        = 'https://eportal.zalamea.ph/api/disbursement/update-disbursement';
+var URL_API_DISBURSEMENT_PAYROLL_REGISTER_LIST         = 'https://eportal.zalamea.ph/api/disbursement/payroll-register-list';
+var URL_API_DISBURSEMENT_PAYROLL_REGISTER_DETAILS_LIST = 'https://eportal.zalamea.ph/api/disbursement/payroll-register-details';
+var URL_API_DISBURSEMENT_BALANCE 					   = 'https://eportal.zalamea.ph/api/disbursement/balance';
+
+var URL_API_ACTIVITY_LOGS_DATASET_LIST                 = 'https://eportal.zalamea.ph/api/activity-logs/dataset-list';
+var URL_API_ACTIVITY_LOGS_MENU_LIST                    = 'https://eportal.zalamea.ph/api/activity-logs/menu-list';
+var URL_API_ACTIVITY_LOGS_SUB_MENU_LIST                = 'https://eportal.zalamea.ph/api/activity-logs/sub-menu-list';
+var URL_API_ACTIVITY_LOGS_ACTION_LIST                  = 'https://eportal.zalamea.ph/api/activity-logs/action-list';
+var URL_API_ACTIVITY_LOGS_RECORD_VIEWING_ACTIVITY      = 'https://eportal.zalamea.ph/api/activity-logs/record-viewing-activity';
+var URL_API_ACTIVITY_LOGS_RECORD_UPLOADING_ACTIVITY    = 'https://eportal.zalamea.ph/api/activity-logs/record-uploading-activity';
+var URL_API_ACTIVITY_LOGS_RECORD_FILTER_DATE_ACTIVITY  = 'https://eportal.zalamea.ph/api/activity-logs/record-filter-date-activity';
+var URL_API_ACTIVITY_LOGS_RECORD_AUTH_EVENT            = 'https://eportal.zalamea.ph/api/activity-logs/record-auth-event';
+var URL_API_ACTIVITY_LOGS_FOR_READING                  = 'https://eportal.zalamea.ph/api/activity-logs/logs-for-reading';
+var URL_API_ACTIVITY_LOGS_RECORD_SELECT_CYCLE_ACTIVITY     = 'https://eportal.zalamea.ph/api/activity-logs/record-select-cycle-activity';
+
+var URL_API_BIOMETRIC_LIST_BY_COMPANY                = 'https://eportal.zalamea.ph/api/biometric/list-by-company';
+var URL_API_BIOMETRIC_COMMAND_LIST_BY_COMPANY        = 'https://eportal.zalamea.ph/api/biometric/command-list-by-company';
+var URL_API_BIOMETRIC_CREATE                         = 'https://eportal.zalamea.ph/api/biometric/create';
+var URL_API_BIOMETRIC_UPDATE                         = 'https://eportal.zalamea.ph/api/biometric/update';
+var URL_API_BIOMETRIC_DELETE                         = 'https://eportal.zalamea.ph/api/biometric/delete';
+var URL_API_BIOMETRIC_SYNC                           = 'https://eportal.zalamea.ph/api/biometric/sync';
+var URL_API_BIOMETRIC_SAVE_CONFIG                    = 'https://eportal.zalamea.ph/api/biometric/save-config';
+var URL_API_BIOMETRIC_GET_CONFIG                     = 'https://eportal.zalamea.ph/api/biometric/config';
+var URL_API_BIOMETRIC_COMPANY_LIST                   = 'https://eportal.zalamea.ph/api/biometric/biometric-company-list';
+var URL_API_BIOMETRIC_SYNC_ALL                       = 'https://eportal.zalamea.ph/api/biometric/biometric-sync-all';
+
+var URL_API_UPLOAD_LEAVE_APPLICATION_DATA 			 = 'https://eportal.zalamea.ph/api/upload-leave-application/save';
+var URL_API_EMPLOYEE_DOCUMENTS  			         = 'https://eportal.zalamea.ph/api/documents/employee-documents';
+var URL_API_DOCUMENTS_UPLOAD  			             = 'https://eportal.zalamea.ph/api/documents/upload-document';
+var URL_API_DOCUMENTS_DELETE  			             = 'https://eportal.zalamea.ph/api/documents/delete-documents';
+var URL_API_ASSIGNEES  			                     = 'https://eportal.zalamea.ph/api/documents/assignees';
+var URL_API_DOCUMENTS_NAMES  			             = 'https://eportal.zalamea.ph/api/documents/document-names';
+
+var URL_API_EMPLOYEE_GEOLOCATION  			         = 'https://eportal.zalamea.ph/api/employee-geolocation/list';
+var URL_API_EMPLOYEE_GEOLOCATION_EMPLOYEE_LIST  	 = 'https://eportal.zalamea.ph/api/employee-geolocation/employee-list';
+var URL_API_EMPLOYEE_GEOLOCATION_ASSIGN_EMPLOYEES  	 = 'https://eportal.zalamea.ph/api/employee-geolocation/assign-employees';
+var URL_API_EMPLOYEE_GEOLOCATION_REMOVE_EMPLOYEES  	 = 'https://eportal.zalamea.ph/api/employee-geolocation/remove-employees';
+
+var URL_API_CLIENT_LIST			                     = 'https://eportal.zalamea.ph/api/client/client-list';
+var URL_API_CLIENT_SAVE		                         = 'https://eportal.zalamea.ph/api/client/save';
+var URL_API_CLIENT_DELETE                            = 'https://eportal.zalamea.ph/api/client/delete';
+var URL_API_CLIENT_EMPLOYEES                         = 'https://eportal.zalamea.ph/api/client/client-employees';
+var URL_API_CLIENT_ASSIGN_EMPLOYEES                  = 'https://eportal.zalamea.ph/api/client/assign-employees';
+var URL_API_CLIENT_EMPLOYEE_ASSIGNMENT               = 'https://eportal.zalamea.ph/api/client/employee-list-assignment';
+var URL_API_CLIENT_REMOVE_EMPLOYEES                  = 'https://eportal.zalamea.ph/api/client/remove-employees';
+var URL_API_CLIENT_CLIENT_INFO_LOGO_PATH             = 'https://eportal.zalamea.ph/api/client/client-info-logo';
+
+var URL_API_LEAVE_ASSIGNMENT_HR_EMPLOYEES_WITH_FILED_LEAVE   = 'https://eportal.zalamea.ph/api/leave-assignment-for-hr/employees-with-filed-leave';
+var URL_API_LEAVE_ASSIGNMENT_HR_EMPLOYEE_LIST                = 'https://eportal.zalamea.ph/api/leave-assignment-for-hr/employee-list';
+var URL_API_LEAVE_ASSIGNMENT_HR_REJECT_LEAVES                = 'https://eportal.zalamea.ph/api/leave-assignment-for-hr/reject-leaves';
+var URL_API_LEAVE_ASSIGNMENTS_HR_VALID_PER_EMPLOYEE          = 'https://eportal.zalamea.ph/api/leave-assignment-for-hr/valid-leave-assignments-per-employee';
+var URL_API_LEAVE_ASSIGNMENTS_HR_ASSIGN_LEAVE                = 'https://eportal.zalamea.ph/api/leave-assignment-for-hr/assign-leave';
+
+var URL_API_MY_DOCUMENTS_DOWNLOAD_FILE                      = 'https://eportal.zalamea.ph/api/my-documents/download-file';
+var URL_API_MY_DOCUMENTS_LIST                               = 'https://eportal.zalamea.ph/api/my-documents/documents-list';
+
+var URL_API_MY_DOCUMENTS_DOWNLOAD_FILE               = 'https://eportal.zalamea.ph/api/my-documents/download-file';
+var URL_API_MY_DOCUMENTS_LIST                        = 'https://eportal.zalamea.ph/api/my-documents/documents-list';
+
+var URL_API_FINAL_PAY_SUMMARY                        = 'https://eportal.zalamea.ph/api/final-pay/final-pay-summary';
+var URL_API_FINAL_PAY_DOWNLOAD_REPORT                = 'https://eportal.zalamea.ph/api/final-pay/download-final-pay';
+
+var URL_API_HRIS_MEMBERS                             = 'https://eportal.zalamea.ph/api/hris/members';
+var URL_API_HRIS_UPDATE_PROFILE_PICTURE              = 'https://eportal.zalamea.ph/api/hris/update-profile-picture';
+var URL_API_HRIS_MY_PROFILE_PICTURE                  = 'https://eportal.zalamea.ph/api/hris/my-profile-picture';
+var URL_API_HRIS_DOWNLOAD_TEMPLATE                   = 'https://eportal.zalamea.ph/api/hris/download-template';
+var URL_API_HRIS_DELETE_PROFILE_PICTURE              = 'https://eportal.zalamea.ph/api/hris/delete-profile-picture';
+var URL_API_HRIS_TOTAL_FILE_SIZE                     = 'https://eportal.zalamea.ph/api/hris/total-file-size-by-company';
+
+var URL_API_HRIS_EDUCATIONAL_HISTORY                 = 'https://eportal.zalamea.ph/api/educational-history/educational-history';
+var URL_API_EDUCATIONAL_HISTORY_SAVE                 = 'https://eportal.zalamea.ph/api/educational-history/save-educational-history';
+var URL_API_DELETE_EDUCATIONAL_HISTORY               = 'https://eportal.zalamea.ph/api/educational-history/delete-educational-history';
+var URL_API_EDUCATIONAL_HISTORY_GET_DEGREE           = 'https://eportal.zalamea.ph/api/educational-history/get-degree';
+
+var URL_API_TRAINING_HRIS_SAVE                            = 'https://eportal.zalamea.ph/api/training-hris/save-training';
+var URL_API_TRAINING_HRIS_LIST                            = 'https://eportal.zalamea.ph/api/training-hris/training-list';
+var URL_API_TRAINING_HRIS_DELETE_INFORMATION              = 'https://eportal.zalamea.ph/api/training-hris/delete-information';
+var URL_API_TRAINING_HRIS_FORMAT_LIST                     = 'https://eportal.zalamea.ph/api/training-hris/format-list';
+var URL_API_TRAINING_HRIS_UPLOAD                          = 'https://eportal.zalamea.ph/api/training-hris/upload';
+
+var URL_API_EDUCATIONAL_HISTORY_SAVE                 = 'https://eportal.zalamea.ph/api/educational-history/save-educational-history';
+var URL_API_EDUCATIONAL_HISTORY_DOWNLOAD_TEMPLATE    = 'https://eportal.zalamea.ph/api/educational-history/download-template';
+var URL_API_EDUCATIONAL_HISTORY_UPLOAD               = 'https://eportal.zalamea.ph/api/educational-history/upload';
+
+var URL_API_ASSET_SAVE                               = 'https://eportal.zalamea.ph/api/asset/save-asset';
+var URL_API_ASSET_GET_CONDITION                      = 'https://eportal.zalamea.ph/api/asset/get-condition';
+var URL_API_ASSET_GET_ASSET                          = 'https://eportal.zalamea.ph/api/asset/asset';
+var URL_API_DELETE_ASSET                             = 'https://eportal.zalamea.ph/api/asset/delete-asset';
+var URL_API_ASSET_UPLOAD_TEMPLATE                    = 'https://eportal.zalamea.ph/api/asset/upload-template';
+
+var URL_API_PERFORMANCE_MANAGEMENT_LIST              = 'https://eportal.zalamea.ph/api/performance-management/performance-management-list';
+var URL_API_PERFORMANCE_MANAGEMENT_SAVE              = 'https://eportal.zalamea.ph/api/performance-management/save';
+var URL_API_PERFORMANCE_MANAGEMENT_DELETE            = 'https://eportal.zalamea.ph/api/performance-management/delete';
+var URL_API_PERFORMANCE_ASSESSMENT_LIST              = 'https://eportal.zalamea.ph/api/performance-management/performance-assessment-list';
+var URL_API_PERFORMANCE_MANAGEMENT_UPLOAD              = 'https://eportal.zalamea.ph/api/performance-management/upload';
+
+var URL_API_MEMO_HRIS_LIST                           = 'https://eportal.zalamea.ph/api/memo/memo-list';
+var URL_API_MEMO_HRIS_SAVE                           = 'https://eportal.zalamea.ph/api/memo/memo-save';
+var URL_API_MEMO_HRIS_TYPE_LIST                      = 'https://eportal.zalamea.ph/api/memo/type-list';
+var URL_API_MEMO_HRIS_DELETE                         = 'https://eportal.zalamea.ph/api/memo/delete';
+var URL_API_MEMO_UPLOAD_TEMPLATE                     = 'https://eportal.zalamea.ph/api/memo/upload-template';
+
+var URL_API_CHECKLIST_SAVE              = 'https://eportal.zalamea.ph/api/checklist/save';
+var URL_API_CHECKLIST_LIST              = 'https://eportal.zalamea.ph/api/checklist/employee-checklist-docs-list';
+
+var URL_API_CLIENT_TOKEN_SAVE                        = 'https://eportal.zalamea.ph/api/client-token/save';
+var URL_API_CLIENT_EMPLOYEE_LIST                     = 'https://eportal.zalamea.ph/api/client-token/employee-list-for-token';
+var URL_API_CLIENT_TOKEN_EMPLOYEE_LIST               = 'https://eportal.zalamea.ph/api/client-token/employee-list';
+var URL_API_CLIENT_TOKEN_ACTIVE_STATUS               = 'https://eportal.zalamea.ph/api/client-token/active-status';
+
+var URL_API_EMPLOYEE_CONVERSION_PERCENTAGE_DOWNLOAD_TEMPLATE    = 'https://eportal.zalamea.ph/api/employee-conversion-percentage/download-template';
+var URL_API_EMPLOYEE_CONVERSION_PERCENTAGE_UPLOAD               = 'https://eportal.zalamea.ph/api/employee-conversion-percentage/upload';
+var URL_API_UPDATE_EXCHANGE_RATE                                = 'https://eportal.zalamea.ph/api/exchange-rate/save-exchange-rate'
+var URL_API_UPDATE_PERCENTAGE                                   = 'https://eportal.zalamea.ph/api/employee-conversion-percentage/update-percentage'
+var URL_API_GET_EXCHANGE_RATE                                   = 'https://eportal.zalamea.ph/api/exchange-rate/exchange-rate'
+var URL_API_EMPLOYEE_CONVERSION_PERCENTAGE_LIST                 = 'https://eportal.zalamea.ph/api/employee-conversion-percentage/list';
+var URL_API_UPLOAD_PAYROLL_CYCLE_DETAILS                        = 'https://eportal.zalamea.ph/api/employee-conversion-percentage/upload-payroll-cycle-details';
+
+var URL_API_BIOMETRIC_EMPLOYEE_LIST                         = 'https://eportal.zalamea.ph/api/biometric-employee/biometric-employee-list';
+var URL_API_BIOMETRIC_EMPLOYEE_ASSIGNMENT                   = 'https://eportal.zalamea.ph/api/biometric-employee/employee-list-for-assignment';
+var URL_API_BIOMETRIC_EMPLOYEE_FILTER_BY_DATA_LIST          = 'https://eportal.zalamea.ph/api/biometric-employee/filter-by-data-list';
+var URL_API_BIOMETRIC_EMPLOYEES_ASSIGN_EMPLOYEES            = 'https://eportal.zalamea.ph/api/biometric-employee/assign-biometric-employees';
+var URL_API_BIOMETRIC_EMPLOYEES_REMOVE                      = 'https://eportal.zalamea.ph/api/biometric-employee/remove-biometric-employees';
+		
+		const HERE_GEOCODER_API_KEY = "i9tok9S99WhV36ReYdHrM2u07bqi6z2LcvhW-fa1wB8";
+	</script>
+
+
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
+
+	<!-- Vendor scripts -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script src="https://krysvac.github.io/ui-bootstrap4-fixed/ui-bootstrap-tpls-4.0.1.js"></script>
+	<script src="https://unpkg.com/ng-table@3.0.1/bundles/ng-table.min.js"></script>
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js?key=AIzaSyCayy3xNpZ0cQVW0QIYQtohkoC9bVpTRqI"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-core.js" charset="utf-8"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-service.js" charset="utf-8"></script>
+    
+	<!-- Vendor styles -->
+	<link rel="stylesheet" href="https://eportal.zalamea.ph/css/app.min.css?t=1763735180045">
+	<script type="text/javascript" src="https://eportal.zalamea.ph/js/components.min.js?t=1763735180045"></script>
+	<!-- Vendor styles -->
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<!-- App styles -->
+
 </head>
-<body style="font-family: Arial, sans-serif; padding: 40px;">
-  <h1>GoPhish Test Page</h1>
-  <p>
-    Click the link below to open your GoPhish tracking URL:
-  </p>
-  <p>
-    <!-- Replace the URL below with your actual GoPhish link -->
-    <a href="http://YOUR_GOPHISH_IP:8080/?rid=TEST123" target="_blank">
-      Click here to verify your account
-    </a>
-  </p>
-  <p>
-    <small>Tip: Replace the URL above with your real GoPhish URL before uploading to GitHub Pages.</small>
-  </p>
+<body ng-cloak class="stickyheader">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NR8243F"
+				  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<ng-view></ng-view>
+
 </body>
 </html>
